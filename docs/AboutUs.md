@@ -31,9 +31,9 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Johnny Doe
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/andrew.png" width="200px">
 
-[[github](https://github.com/wrewsama] [[portfolio](team/andrew.md)]
+[github](https://github.com/wrewsama) [portfolio](team/andrew.md)
 
 * Role: Developer
 * Responsibilities: UI
