@@ -278,8 +278,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
 | `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
 | `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
+| `* *`    | developer in a team                        | add new teammate details       | refer to their github, slack, and other usernames when needed          |
+| `* *`    | developer in a team                        | update existing contacts       | allow for changes in github, slack and other usernames                 |
+| `* *`    | developer in a team                        | delete contacts                | remove a teammate from the AB if he leaves the team                    |
+| `* *`    | developer in a team                        | delete contact details         | remove obsolete contact details for a teammate                         |     
 
-*{More to be added}*
+*{More to be added}* 
 
 ### Use cases
 
