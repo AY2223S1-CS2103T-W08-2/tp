@@ -31,6 +31,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
+        System.out.println(name.fullName);
 
         Person person = new Person(name);
 
