@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.contact.Contact;
 
 /**
  * A ui for the status bar that is displayed at the header of the application.
@@ -47,16 +49,27 @@ public class DetailPanel extends MainPanel {
 
         nameLabel.setText(person.getName().toString());
 
-        // These are mock data, to be implemented in future
-        Image placeholder = new Image(this.getClass().getResourceAsStream("/images/user_placeholder.png"));
+        Image placeholder = new Image(
+            Objects.requireNonNull(
+                this.getClass().getResourceAsStream("/images/user_placeholder.png")
+            )
+        );
+
         profileImageContainer.setFill(new ImagePattern(placeholder));
-        roleLabel.setText("DevOps Engineer");
+        person.getTag().ifPresent(tag -> roleLabel.setText(tag.tagName));
         timezoneLabel.setText("Local Time: 10.00 am (UTC+8)");
 
         List<ContactBox> contactBoxList = new ArrayList<>();
-        contactBoxList.add(new ContactBox("telegram", "hello-world"));
-        contactBoxList.add(new ContactBox("email", "hello-world@gmail.com"));
-        contactBoxList.add(new ContactBox("slack", "hello-world"));
+
+        for (Contact contact : person.getContactMap().values()) {
+            contactBoxList.add(
+                new ContactBox(
+                    contact.getContactTypeName(),
+                    contact.getValue(),
+                    contact.getLink()
+                )
+            );
+        }
 
         for (ContactBox contact : contactBoxList) {
             contactBoxContainer.getChildren().add(contact.getRoot());

@@ -29,9 +29,9 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args, PREFIX_NAME, PREFIX_GITHUB,
-                PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM,
-                PREFIX_SLACK, PREFIX_TAG
+            args, PREFIX_NAME, PREFIX_GITHUB,
+            PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM,
+            PREFIX_SLACK, PREFIX_TAG
         );
 
         Index index;
@@ -56,7 +56,6 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setTelegram(ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).get()));
         }
         if (argMultimap.getValue(PREFIX_SLACK).isPresent()) {
-            System.out.println(ParserUtil.parseSlack(argMultimap.getValue(PREFIX_SLACK).get()));
             editPersonDescriptor.setSlack(ParserUtil.parseSlack(argMultimap.getValue(PREFIX_SLACK).get()));
         }
         if (argMultimap.getValue(PREFIX_TAG).isPresent()) {

@@ -64,7 +64,6 @@ public class Person {
     }
 
     public Optional<Tag> getTag() {
-        System.out.println(tag == null);
         return Optional.ofNullable(this.tag);
     }
 

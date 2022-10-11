@@ -33,7 +33,6 @@ public class Telegram extends Contact {
     public Telegram(String username) {
         super(CONTACT_TYPE_NAME, TELEGRAM_LINK_PREFIX + username);
         requireNonNull(username);
-        System.out.println(username);
         checkArgument(isValidTelegram(username), MESSAGE_CONSTRAINTS);
         setValue(username);
     }
