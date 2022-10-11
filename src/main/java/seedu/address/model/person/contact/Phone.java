@@ -14,8 +14,6 @@ public class Phone extends Contact {
         "Phone numbers should only contain numbers, and it should be at least 3 digits long";
     public static final String VALIDATION_REGEX = "\\d{3,}";
     public static final String PHONE_LINK_PREFIX = "tel:";
-    public static final String PHONE_LOGO_FILEPATH = "images/contact/phone.png";
-
     private static final String CONTACT_TYPE_NAME = "Phone";
 
 
@@ -25,7 +23,7 @@ public class Phone extends Contact {
      * @param phone A valid phone number.
      */
     public Phone(String phone) {
-        super(CONTACT_TYPE_NAME, PHONE_LINK_PREFIX + phone, PHONE_LOGO_FILEPATH);
+        super(CONTACT_TYPE_NAME, PHONE_LINK_PREFIX + phone);
         requireNonNull(phone);
         checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
         setValue(phone);

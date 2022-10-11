@@ -30,7 +30,7 @@ public class AddCommandParser implements Parser<AddCommand> {
             //TODO: GitHub
         } else {
             Name name = new Name(nameString);
-            person = new Person(name, new HashMap<>());
+            person = new Person(name, new HashMap<>(), null);
         }
 
 

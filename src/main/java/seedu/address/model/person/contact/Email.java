@@ -9,7 +9,6 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Email extends Contact {
 
-    public static final String EMAIL_LOGO_FILEPATH = "images/contact/email.png";
     private static final String SPECIAL_CHARACTERS = "+_.-";
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
         + "and adhere to the following constraints:\n"
@@ -40,7 +39,7 @@ public class Email extends Contact {
      * @param email A valid email address.
      */
     public Email(String email) {
-        super(CONTACT_TYPE_NAME, EMAIL_LINK_PREFIX + email, EMAIL_LOGO_FILEPATH);
+        super(CONTACT_TYPE_NAME, EMAIL_LINK_PREFIX + email);
         requireNonNull(email);
         checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
         this.setValue(email);

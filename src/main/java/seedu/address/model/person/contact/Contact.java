@@ -7,21 +7,18 @@ public abstract class Contact {
 
     private final String contactType;
     private final String link;
-    private final String logoFilePath;
     private String value;
 
     /**
      * @param contactTypeName String of contact type to be shown to user upon editing/adding.
      * @param link            Link to be used as hyperlink in UI.
-     * @param logoFilePath    Pathname of logo corresponding to contact type.
      */
-    public Contact(String contactTypeName, String link, String logoFilePath) {
+    public Contact(String contactTypeName, String link) {
         this.contactType = contactTypeName;
         this.link = link;
-        this.logoFilePath = logoFilePath;
     }
 
-    public String getContactType() {
+    public String getContactTypeName() {
         return contactType;
     }
 
@@ -35,9 +32,5 @@ public abstract class Contact {
 
     public String getLink() {
         return this.link;
-    }
-
-    public String getLogoFilePath() {
-        return this.logoFilePath;
     }
 }

@@ -118,11 +118,7 @@ class JsonAdaptedPerson {
             modelTag = new Tag(tag);
         }
 
-
-        if (modelTag != null) {
-            return new Person(modelName, modelContactMap, modelTag);
-        }
-        return new Person(modelName, modelContactMap);
+        return new Person(modelName, modelContactMap, modelTag);
     }
 
 }

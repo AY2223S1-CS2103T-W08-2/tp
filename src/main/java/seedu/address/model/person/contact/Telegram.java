@@ -22,7 +22,6 @@ public class Telegram extends Contact {
      */
     public static final String VALIDATION_REGEX = "^@(?=.{5,32}$)(?!.*__)[A-Za-z][A-Za-z0-9_]*[A-Za-z0-9]$";
     public static final String TELEGRAM_LINK_PREFIX = "https://t.me/";
-    public static final String TELEGRAM_LOGO_FILEPATH = "images/contact/telegram.png";
 
     private static final String CONTACT_TYPE_NAME = "Telegram";
 
@@ -32,7 +31,7 @@ public class Telegram extends Contact {
      * @param username A valid username.
      */
     public Telegram(String username) {
-        super(CONTACT_TYPE_NAME, TELEGRAM_LINK_PREFIX + username, TELEGRAM_LOGO_FILEPATH);
+        super(CONTACT_TYPE_NAME, TELEGRAM_LINK_PREFIX + username);
         requireNonNull(username);
         System.out.println(username);
         checkArgument(isValidTelegram(username), MESSAGE_CONSTRAINTS);

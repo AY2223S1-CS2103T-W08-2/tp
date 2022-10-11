@@ -11,7 +11,6 @@ public class Slack extends Contact {
 
     public static final String MESSAGE_CONSTRAINTS = "Slack channel names must be up to 20 characters long.";
     public static final String VALIDATION_REGEX = "^[a-z0-9-_]{1}[a-z0-9-_]{0,20}$";
-    public static final String SLACK_LOGO_FILEPATH = "images/contact/slack.png";
     private static final String SLACK_LINK_PREFIX = "https://slack.com/app_redirect?channel=";
     private static final String CONTACT_TYPE_NAME = "Slack";
 
@@ -21,7 +20,7 @@ public class Slack extends Contact {
      * @param channelName A valid channel name.
      */
     public Slack(String channelName) {
-        super(CONTACT_TYPE_NAME, SLACK_LINK_PREFIX + channelName, SLACK_LOGO_FILEPATH);
+        super(CONTACT_TYPE_NAME, SLACK_LINK_PREFIX + channelName);
         requireNonNull(channelName);
         checkArgument(isValidSlack(channelName), MESSAGE_CONSTRAINTS);
         setValue(channelName);

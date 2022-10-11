@@ -33,21 +33,10 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(Name name, HashMap<ContactType, Contact> contactMap, Tag tag) {
-        requireAllNonNull(name, contactMap, tag);
-        this.contactMap = contactMap;
-        this.name = name;
-        this.tag = tag;
-    }
-
-    /**
-     * @param name       Name to be associated with Person.
-     * @param contactMap HashMap containing objects corresponding to various contacts.
-     */
-    public Person(Name name, HashMap<ContactType, Contact> contactMap) {
         requireAllNonNull(name, contactMap);
         this.contactMap = contactMap;
         this.name = name;
-        this.tag = null;
+        this.tag = tag;
     }
 
     public Name getName() {
@@ -127,7 +116,7 @@ public class Person {
 
         HashMap<ContactType, Contact> contactMap = getContactMap();
         for (Contact contact : contactMap.values()) {
-            builder.append("; ").append(contact.getContactType()).append(": ").append(contact.getValue());
+            builder.append("; ").append(contact.getContactTypeName()).append(": ").append(contact.getValue());
         }
         builder.append("; Tag: ").append(tag);
         return builder.toString();
