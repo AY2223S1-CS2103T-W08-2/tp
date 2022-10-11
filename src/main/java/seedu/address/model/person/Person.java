@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import seedu.address.model.person.github.GithubUser;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -16,24 +17,19 @@ import seedu.address.model.tag.Tag;
 public class Person {
 
     // Identity fields
-    private final Name name;
-    private final Phone phone;
-    private final Email email;
+    private Name name;
+    private Phone phone = null;
+    private Email email = null;
+    private GithubUser githubUser = null;
 
     // Data fields
-    private final Address address;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name) {
         this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.tags.addAll(tags);
     }
 
     public Name getName() {
@@ -48,8 +44,8 @@ public class Person {
         return email;
     }
 
-    public Address getAddress() {
-        return address;
+    public GithubUser getGitHub() {
+        return githubUser;
     }
 
     /**
@@ -73,6 +69,11 @@ public class Person {
                 && otherPerson.getName().equals(getName());
     }
 
+    public Person setGithub(GithubUser githubUser) {
+        this.githubUser = githubUser;
+        return this;
+    }
+
     /**
      * Returns true if both persons have the same identity and data fields.
      * This defines a stronger notion of equality between two persons.
@@ -91,14 +92,14 @@ public class Person {
         return otherPerson.getName().equals(getName())
                 && otherPerson.getPhone().equals(getPhone())
                 && otherPerson.getEmail().equals(getEmail())
-                && otherPerson.getAddress().equals(getAddress())
-                && otherPerson.getTags().equals(getTags());
+                && otherPerson.getTags().equals(getTags())
+                && otherPerson.getGitHub().equals(getGitHub());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, githubUser, tags);
     }
 
     @Override
@@ -109,8 +110,8 @@ public class Person {
                 .append(getPhone())
                 .append("; Email: ")
                 .append(getEmail())
-                .append("; Address: ")
-                .append(getAddress());
+                .append("; GitHub: ")
+                .append(getGitHub());
 
         Set<Tag> tags = getTags();
         if (!tags.isEmpty()) {
