@@ -11,11 +11,9 @@ public class Slack extends Contact {
 
     public static final String MESSAGE_CONSTRAINTS = "Slack channel names must be up to 20 characters long.";
     public static final String VALIDATION_REGEX = "^[a-z0-9-_]{1}[a-z0-9-_]{0,20}$";
+    public static final String SLACK_LOGO_FILEPATH = "images/contact/slack.png";
     private static final String SLACK_LINK_PREFIX = "https://slack.com/app_redirect?channel=";
-    public static final String SLACK_LOGO_FILEPATH = "";
-    private static final String CONTACT_TYPE = "Slack";
-
-    public final String value;
+    private static final String CONTACT_TYPE_NAME = "Slack";
 
     /**
      * Constructs an {@code Address}.
@@ -23,10 +21,10 @@ public class Slack extends Contact {
      * @param channelName A valid channel name.
      */
     public Slack(String channelName) {
-        super(CONTACT_TYPE);
+        super(CONTACT_TYPE_NAME, SLACK_LINK_PREFIX + channelName, SLACK_LOGO_FILEPATH);
         requireNonNull(channelName);
         checkArgument(isValidSlack(channelName), MESSAGE_CONSTRAINTS);
-        value = channelName;
+        setValue(channelName);
     }
 
     /**
@@ -41,23 +39,23 @@ public class Slack extends Contact {
      */
     @Override
     public String getLink() {
-        return SLACK_LINK_PREFIX + this.value;
+        return SLACK_LINK_PREFIX + this.getValue();
     }
 
     @Override
     public String toString() {
-        return value;
+        return getValue();
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof Telegram // instanceof handles nulls
-                && value.equals(((Telegram) other).value)); // state check
+            || (other instanceof Telegram // instanceof handles nulls
+            && getValue().equals(((Telegram) other).getValue())); // state check
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return getValue().hashCode();
     }
 }

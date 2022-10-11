@@ -10,11 +10,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Telegram extends Contact {
 
     public static final String MESSAGE_CONSTRAINTS = "Telegram username should be of the format @username "
-            + "and adhere to the following constraints:\n"
-            + "1. The username should be between 5 and 32 characters in length."
-            + "2. The username should only contain alphanumeric characters and underscores. The username may not "
-            + "start or end with any underscores."
-            + "3. The username must not have consecutive underscores.";
+        + "and adhere to the following constraints:\n"
+        + "1. The username should be between 5 and 32 characters in length."
+        + "2. The username should only contain alphanumeric characters and underscores. The username may not "
+        + "start or end with any underscores."
+        + "3. The username must not have consecutive underscores.";
 
     /*
      * The first character of the telegram must not be a whitespace,
@@ -22,11 +22,9 @@ public class Telegram extends Contact {
      */
     public static final String VALIDATION_REGEX = "^@(?=.{5,32}$)(?!.*__)[A-Za-z][A-Za-z0-9_]*[A-Za-z0-9]$";
     public static final String TELEGRAM_LINK_PREFIX = "https://t.me/";
-    public static final String TELEGRAM_LOGO_FILEPATH = "";
+    public static final String TELEGRAM_LOGO_FILEPATH = "images/contact/telegram.png";
 
-    private static final String CONTACT_TYPE = "Telegram";
-
-    public final String value;
+    private static final String CONTACT_TYPE_NAME = "Telegram";
 
     /**
      * Constructs an {@code Address}.
@@ -34,11 +32,11 @@ public class Telegram extends Contact {
      * @param username A valid username.
      */
     public Telegram(String username) {
-        super(CONTACT_TYPE);
+        super(CONTACT_TYPE_NAME, TELEGRAM_LINK_PREFIX + username, TELEGRAM_LOGO_FILEPATH);
         requireNonNull(username);
         System.out.println(username);
         checkArgument(isValidTelegram(username), MESSAGE_CONSTRAINTS);
-        value = username;
+        setValue(username);
     }
 
     /**
@@ -53,23 +51,23 @@ public class Telegram extends Contact {
      */
     @Override
     public String getLink() {
-        return TELEGRAM_LINK_PREFIX + this.value.substring(1);
+        return TELEGRAM_LINK_PREFIX + this.getValue().substring(1);
     }
 
     @Override
     public String toString() {
-        return value;
+        return getValue();
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof Telegram // instanceof handles nulls
-                && value.equals(((Telegram) other).value)); // state check
+            || (other instanceof Telegram // instanceof handles nulls
+            && getValue().equals(((Telegram) other).getValue())); // state check
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return getValue().hashCode();
     }
 }

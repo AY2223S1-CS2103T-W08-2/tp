@@ -1,13 +1,17 @@
 package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_EMAIL;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_PHONE;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_SLACK;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_TELEGRAM;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Objects;
-import java.util.Set;
+import java.util.Optional;
 
 import seedu.address.model.person.contact.Contact;
+import seedu.address.model.person.contact.ContactType;
 import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.contact.Phone;
 import seedu.address.model.person.contact.Slack;
@@ -22,73 +26,57 @@ public class Person {
 
     // Identity fields
     private final Name name;
-    private Email email = null;
-    private Phone phone = null;
-    private Slack slack = null;
-    private Telegram telegram = null;
-    private final Set<Tag> tags = new HashSet<>();
+    private final HashMap<ContactType, Contact> contactMap;
+    private final Tag tag;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name) {
-        requireAllNonNull(name);
+    public Person(Name name, HashMap<ContactType, Contact> contactMap, Tag tag) {
+        requireAllNonNull(name, contactMap, tag);
+        this.contactMap = contactMap;
         this.name = name;
+        this.tag = tag;
+    }
+
+    /**
+     * @param name       Name to be associated with Person.
+     * @param contactMap HashMap containing objects corresponding to various contacts.
+     */
+    public Person(Name name, HashMap<ContactType, Contact> contactMap) {
+        requireAllNonNull(name, contactMap);
+        this.contactMap = contactMap;
+        this.name = name;
+        this.tag = null;
     }
 
     public Name getName() {
         return name;
     }
 
-    public Email getEmail() {
-        return email;
-    }
-    public Person setEmail(Email email) {
-        this.email = email;
-        return this;
+    public HashMap<ContactType, Contact> getContactMap() {
+        return this.contactMap;
     }
 
-    public Phone getPhone() {
-        return phone;
-    }
-    public Person setPhone(Phone phone) {
-        this.phone = phone;
-        return this;
+    public Optional<Email> getEmail() {
+        return Optional.ofNullable((Email) contactMap.get(CONTACT_TYPE_EMAIL));
     }
 
-    public Slack getSlack() {
-        return slack;
-    }
-    public Person setSlack(Slack slack) {
-        this.slack = slack;
-        return this;
+    public Optional<Phone> getPhone() {
+        return Optional.ofNullable((Phone) contactMap.get(CONTACT_TYPE_PHONE));
     }
 
-    public Telegram getTelegram() {
-        return telegram;
-    }
-    public Person setTelegram(Telegram telegram) {
-        this.telegram = telegram;
-        return this;
+    public Optional<Slack> getSlack() {
+        return Optional.ofNullable((Slack) contactMap.get(CONTACT_TYPE_SLACK));
     }
 
-    public Person addTag(Tag tag) {
-        requireAllNonNull(tag);
-        tags.add(tag);
-        return this;
+    public Optional<Telegram> getTelegram() {
+        return Optional.ofNullable((Telegram) contactMap.get(CONTACT_TYPE_TELEGRAM));
     }
 
-    public Person addTags(Set<Tag> tags) {
-        requireAllNonNull(tags);
-        this.tags.addAll(tags);
-        return this;
-    }
-    /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public Optional<Tag> getTag() {
+        System.out.println(tag == null);
+        return Optional.ofNullable(this.tag);
     }
 
     /**
@@ -100,8 +88,7 @@ public class Person {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName());
+        return otherPerson != null && otherPerson.getName().equals(getName());
     }
 
     /**
@@ -120,37 +107,30 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return otherPerson.getName().equals(getName())
-                && otherPerson.getEmail().equals(getEmail())
-                && otherPerson.getPhone().equals(getPhone())
-                && otherPerson.getSlack().equals(getSlack())
-                && otherPerson.getTelegram().equals(getTelegram())
-                && otherPerson.getTags().equals(getTags());
+            && otherPerson.getEmail().equals(getEmail())
+            && otherPerson.getPhone().equals(getPhone())
+            && otherPerson.getSlack().equals(getSlack())
+            && otherPerson.getTelegram().equals(getTelegram())
+            && otherPerson.getTag().equals(getTag());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, email, phone, slack, telegram, tags);
+        return Objects.hash(name, contactMap, tag);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(getName())
-                .append("; Email: ")
-                .append(getEmail())
-                .append("; Phone: ")
-                .append(getPhone())
-                .append("; Slack: ")
-                .append(getSlack())
-                .append("; Telegram: ")
-                .append(getTelegram());
+        builder.append(getName());
 
-        Set<Tag> tags = getTags();
-        if (!tags.isEmpty()) {
-            builder.append("; Tags: ");
-            tags.forEach(builder::append);
+        HashMap<ContactType, Contact> contactMap = getContactMap();
+        for (Contact contact : contactMap.values()) {
+            builder.append("; ").append(contact.getContactType()).append(": ").append(contact.getValue());
         }
+        builder.append("; Tag: ").append(tag);
         return builder.toString();
     }
+
 }

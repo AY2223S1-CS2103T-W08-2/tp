@@ -2,7 +2,7 @@
 
 ![Ui](docs/images/Ui.png)
 
-* GithubContact is **an telegram book integrated with Github Public API, targeted at programmers and help them communicate smoothly**.<br>
+* GithubContact is **an address book integrated with Github Public API, targeted at programmers and help them communicate smoothly**.<br>
   Example usages:
   * as a contact book to keep tracks of contact details of your peers.
   * as a case study

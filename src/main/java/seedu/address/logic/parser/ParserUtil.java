@@ -9,11 +9,11 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.contact.Email;
+import seedu.address.model.person.contact.Phone;
 import seedu.address.model.person.contact.Slack;
 import seedu.address.model.person.contact.Telegram;
-import seedu.address.model.person.contact.Email;
-import seedu.address.model.person.Name;
-import seedu.address.model.person.contact.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -26,6 +26,7 @@ public class ParserUtil {
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.
+     *
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
@@ -67,14 +68,14 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String telegram} into an {@code Address}.
+     * Parses a {@code String telegram} into an {@code Telegram}.
      * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given {@code telegram} is invalid.
      */
     public static Telegram parseTelegram(String telegram) throws ParseException {
         requireNonNull(telegram);
-        String trimmedTelegram= telegram.trim();
+        String trimmedTelegram = telegram.trim();
         if (!Telegram.isValidTelegram(trimmedTelegram)) {
             throw new ParseException(Telegram.MESSAGE_CONSTRAINTS);
         }
@@ -82,15 +83,15 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String telegram} into an {@code Address}.
+     * Parses a {@code String slack} into an {@code Slack}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code telegram} is invalid.
+     * @throws ParseException if the given {@code slack} is invalid.
      */
     public static Slack parseSlack(String slack) throws ParseException {
         requireNonNull(slack);
         String trimmedSlack = slack.trim();
-        if (!Telegram.isValidTelegram(trimmedSlack)) {
+        if (!Slack.isValidSlack(trimmedSlack)) {
             throw new ParseException(Slack.MESSAGE_CONSTRAINTS);
         }
         return new Slack(trimmedSlack);

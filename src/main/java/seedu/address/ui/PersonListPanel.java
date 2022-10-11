@@ -32,7 +32,7 @@ public class PersonListPanel extends MainPanel {
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
 
-        EventHandler keyEventHandler = new EventHandler<KeyEvent>() {
+        EventHandler<KeyEvent> keyEventHandler = new EventHandler<>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(KeyCode.ENTER)) {
@@ -42,7 +42,7 @@ public class PersonListPanel extends MainPanel {
         };
         setKeyEventHandler(keyEventHandler);
 
-        EventHandler clickEventHandler = new EventHandler<MouseEvent>() {
+        EventHandler<MouseEvent> clickEventHandler = new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
                 // Double Click
@@ -74,6 +74,17 @@ public class PersonListPanel extends MainPanel {
     }
 
     /**
+     * Represents a function that switch to detail panel.
+     */
+    @FunctionalInterface
+    public interface DetailPanelSwitcher {
+        /**
+         * Switch to detail panel with the person.
+         */
+        void execute(Person person);
+    }
+
+    /**
      * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code PersonCard}.
      */
     class PersonListViewCell extends ListCell<Person> {
@@ -88,16 +99,5 @@ public class PersonListPanel extends MainPanel {
                 setGraphic(new PersonCard(person, getIndex() + 1).getRoot());
             }
         }
-    }
-
-    /**
-     * Represents a function that switch to detail panel.
-     */
-    @FunctionalInterface
-    public interface DetailPanelSwitcher {
-        /**
-         * Switch to detail panel with the person.
-         */
-        void execute(Person person);
     }
 }

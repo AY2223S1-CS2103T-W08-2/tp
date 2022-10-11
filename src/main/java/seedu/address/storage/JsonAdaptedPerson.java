@@ -1,21 +1,24 @@
 package seedu.address.storage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_EMAIL;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_PHONE;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_SLACK;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_TELEGRAM;
+
+import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.person.contact.Slack;
-import seedu.address.model.person.contact.Telegram;
-import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.contact.Contact;
+import seedu.address.model.person.contact.ContactType;
+import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.contact.Phone;
+import seedu.address.model.person.contact.Slack;
+import seedu.address.model.person.contact.Telegram;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -26,27 +29,25 @@ class JsonAdaptedPerson {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
 
     private final String name;
-    private final String phone;
-    private final String email;
-    private final String telegram;
-    private final String slack;
-    private final List<JsonAdaptedTag> tagged = new ArrayList<>();
+    private String phone;
+    private String email;
+    private String telegram;
+    private String slack;
+    private String tag;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("telegram") String telegram,
-            @JsonProperty("slack") String slack, @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
+                             @JsonProperty("email") String email, @JsonProperty("telegram") String telegram,
+                             @JsonProperty("slack") String slack, @JsonProperty("tag") String tag) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.telegram = telegram;
         this.slack = slack;
-        if (tagged != null) {
-            this.tagged.addAll(tagged);
-        }
+        this.tag = tag;
     }
 
     /**
@@ -54,13 +55,11 @@ class JsonAdaptedPerson {
      */
     public JsonAdaptedPerson(Person source) {
         name = source.getName().fullName;
-        phone = source.getPhone().value;
-        email = source.getEmail().value;
-        telegram = source.getTelegram().value;
-        slack = source.getSlack().value;
-        tagged.addAll(source.getTags().stream()
-                .map(JsonAdaptedTag::new)
-                .collect(Collectors.toList()));
+        source.getPhone().ifPresent(phone -> this.phone = phone.getValue());
+        source.getEmail().ifPresent(email -> this.email = email.getValue());
+        source.getTelegram().ifPresent(telegram -> this.telegram = telegram.getValue());
+        source.getSlack().ifPresent(slack -> this.slack = slack.getValue());
+        source.getTag().ifPresent(tag -> this.tag = tag.tagName);
     }
 
     /**
@@ -69,14 +68,8 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
-        final List<Tag> personTags = new ArrayList<>();
-        Phone modelPhone = null;
-        Email modelEmail = null;
-        Telegram modelTelegram = null;
-        Slack modelSlack = null;
-        for (JsonAdaptedTag tag : tagged) {
-            personTags.add(tag.toModelType());
-        }
+        HashMap<ContactType, Contact> modelContactMap = new HashMap<ContactType, Contact>();
+        Tag modelTag = null;
 
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
@@ -90,7 +83,7 @@ class JsonAdaptedPerson {
             if (!Phone.isValidPhone(phone)) {
                 throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
             }
-            modelPhone = new Phone(phone);
+            modelContactMap.put(CONTACT_TYPE_PHONE, new Phone(phone));
         }
 
 
@@ -98,7 +91,7 @@ class JsonAdaptedPerson {
             if (!Email.isValidEmail(email)) {
                 throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
             }
-            modelEmail = new Email(email);
+            modelContactMap.put(CONTACT_TYPE_EMAIL, new Email(email));
         }
 
 
@@ -106,19 +99,30 @@ class JsonAdaptedPerson {
             if (!Telegram.isValidTelegram(telegram)) {
                 throw new IllegalValueException(Telegram.MESSAGE_CONSTRAINTS);
             }
-            modelTelegram = new Telegram(telegram);        }
+            modelContactMap.put(CONTACT_TYPE_TELEGRAM, new Telegram(telegram));
+        }
 
 
         if (slack != null) {
             if (!Slack.isValidSlack(slack)) {
                 throw new IllegalValueException(Slack.MESSAGE_CONSTRAINTS);
             }
-            modelSlack = new Slack(slack);
+            modelContactMap.put(CONTACT_TYPE_SLACK, new Slack(slack));
         }
 
 
-        final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName).setEmail(modelEmail).setPhone(modelPhone).setSlack(modelSlack).setTelegram(modelTelegram).addTags(modelTags);
+        if (tag != null) {
+            if (!Tag.isValidTagName(tag)) {
+                throw new IllegalValueException(Slack.MESSAGE_CONSTRAINTS);
+            }
+            modelTag = new Tag(tag);
+        }
+
+
+        if (modelTag != null) {
+            return new Person(modelName, modelContactMap, modelTag);
+        }
+        return new Person(modelName, modelContactMap);
     }
 
 }

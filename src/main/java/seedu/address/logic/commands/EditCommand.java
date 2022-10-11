@@ -1,31 +1,35 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SLACK;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SLACK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_EMAIL;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_PHONE;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_SLACK;
+import static seedu.address.model.person.contact.ContactType.CONTACT_TYPE_TELEGRAM;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.contact.Slack;
-import seedu.address.model.person.contact.Telegram;
-import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.contact.Contact;
+import seedu.address.model.person.contact.ContactType;
+import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.contact.Phone;
+import seedu.address.model.person.contact.Slack;
+import seedu.address.model.person.contact.Telegram;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -39,15 +43,10 @@ public class EditCommand extends Command {
             + "by the index number used in the displayed person list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_NAME + "NAME] "
-            + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
-            + "[" + PREFIX_SLACK + "SLACK] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + "[" + PREFIX_NAME + "NAME] " + "[" + PREFIX_PHONE + "PHONE] "
+            + "[" + PREFIX_EMAIL + "EMAIL] " + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
+            + "[" + PREFIX_SLACK + "SLACK] " + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_PHONE + "91234567 " + PREFIX_EMAIL + "johndoe@example.com";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -57,7 +56,7 @@ public class EditCommand extends Command {
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
+     * @param index                of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
      */
     public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
@@ -66,6 +65,22 @@ public class EditCommand extends Command {
 
         this.index = index;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+    }
+
+    /**
+     * Creates and returns a {@code Person} with the details of {@code personToEdit}
+     * edited with {@code editPersonDescriptor}.
+     */
+    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
+        assert personToEdit != null;
+
+        Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
+        HashMap<ContactType, Contact> updatedContactMap = personToEdit.getContactMap();
+        Tag updatedTags = editPersonDescriptor.getTag().orElse(personToEdit.getTag().orElse(null));
+
+        updatedContactMap.putAll(editPersonDescriptor.getContactMap());
+
+        return new Person(updatedName, updatedContactMap, updatedTags);
     }
 
     @Override
@@ -89,28 +104,6 @@ public class EditCommand extends Command {
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
     }
 
-    /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
-     */
-    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
-        assert personToEdit != null;
-
-        Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
-        Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
-        Slack updatedSlack = editPersonDescriptor.getSlack().orElse(personToEdit.getSlack());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
-
-        return new Person(updatedName)
-                .setPhone(updatedPhone)
-                .setEmail(updatedEmail)
-                .setTelegram(updatedTelegram)
-                .setSlack(updatedSlack)
-                .addTags(updatedTags);
-    }
-
     @Override
     public boolean equals(Object other) {
         // short circuit if same object
@@ -125,8 +118,7 @@ public class EditCommand extends Command {
 
         // state check
         EditCommand e = (EditCommand) other;
-        return index.equals(e.index)
-                && editPersonDescriptor.equals(e.editPersonDescriptor);
+        return index.equals(e.index) && editPersonDescriptor.equals(e.editPersonDescriptor);
     }
 
     /**
@@ -135,14 +127,12 @@ public class EditCommand extends Command {
      */
     public static class EditPersonDescriptor {
         private Name name;
-        private Phone phone;
-        private Email email;
-        private Telegram telegram;
-        private Slack slack;
+        private HashMap<ContactType, Contact> contactMap = new HashMap<>();
         //TODO: Github
-        private Set<Tag> tags;
+        private Tag tag;
 
-        public EditPersonDescriptor() {}
+        public EditPersonDescriptor() {
+        }
 
         /**
          * Copy constructor.
@@ -150,77 +140,77 @@ public class EditCommand extends Command {
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
-            setPhone(toCopy.phone);
-            setEmail(toCopy.email);
-            setTelegram(toCopy.telegram);
-            setSlack(toCopy.slack);
-            setTags(toCopy.tags);
+            setContactMap(toCopy.contactMap);
+            setTag(toCopy.tag);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, telegram, slack, tags);
-        }
-
-        public void setName(Name name) {
-            this.name = name;
+            return CollectionUtil.isAnyNonNull(name, tag) || contactMap.size() > 0;
         }
 
         public Optional<Name> getName() {
             return Optional.ofNullable(name);
         }
 
-        public void setPhone(Phone phone) {
-            this.phone = phone;
+        public void setName(Name name) {
+            this.name = name;
         }
 
         public Optional<Phone> getPhone() {
-            return Optional.ofNullable(phone);
+            return Optional.ofNullable((Phone) this.contactMap.get(CONTACT_TYPE_PHONE));
         }
 
-        public void setEmail(Email email) {
-            this.email = email;
+        public void setPhone(Phone phone) {
+            requireNonNull(phone);
+            this.contactMap.put(CONTACT_TYPE_PHONE, phone);
         }
 
         public Optional<Email> getEmail() {
-            return Optional.ofNullable(email);
+            return Optional.ofNullable((Email) this.contactMap.get(CONTACT_TYPE_EMAIL));
         }
 
-        public void setTelegram(Telegram telegram) {
-            this.telegram = telegram;
+        public void setEmail(Email email) {
+            requireNonNull(email);
+            this.contactMap.put(CONTACT_TYPE_EMAIL, email);
         }
 
         public Optional<Telegram> getTelegram() {
-            return Optional.ofNullable(telegram);
+            return Optional.ofNullable((Telegram) this.contactMap.get(CONTACT_TYPE_TELEGRAM));
         }
 
-        public void setSlack(Slack slack) {
-            this.slack = slack;
+        public void setTelegram(Telegram telegram) {
+            requireNonNull(telegram);
+            this.contactMap.put(CONTACT_TYPE_TELEGRAM, telegram);
         }
 
         public Optional<Slack> getSlack() {
-            return Optional.ofNullable(slack);
+            return Optional.ofNullable((Slack) this.contactMap.get(CONTACT_TYPE_SLACK));
+        }
+
+        public void setSlack(Slack slack) {
+            requireNonNull(slack);
+            this.contactMap.put(CONTACT_TYPE_SLACK, slack);
+        }
+
+        public HashMap<ContactType, Contact> getContactMap() {
+            return contactMap;
+        }
+
+        public void setContactMap(HashMap<ContactType, Contact> contactMap) {
+            this.contactMap = contactMap;
         }
 
         // TODO: Github
 
-        /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
-         */
-        public void setTags(Set<Tag> tags) {
-            this.tags = (tags != null) ? new HashSet<>(tags) : null;
+        public Optional<Tag> getTag() {
+            return Optional.ofNullable(tag);
         }
 
-        /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
-         */
-        public Optional<Set<Tag>> getTags() {
-            return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        public void setTag(Tag tag) {
+            this.tag = tag;
         }
 
         @Override
@@ -239,11 +229,8 @@ public class EditCommand extends Command {
             EditPersonDescriptor e = (EditPersonDescriptor) other;
             // TODO: Github
             return getName().equals(e.getName())
-                    && getPhone().equals(e.getPhone())
-                    && getEmail().equals(e.getEmail())
-                    && getTelegram().equals(e.getTelegram())
-                    && getSlack().equals(e.getSlack())
-                    && getTags().equals(e.getTags());
+                    && getContactMap().equals(e.getContactMap())
+                    && getTag().equals(e.getTag());
         }
     }
 }
