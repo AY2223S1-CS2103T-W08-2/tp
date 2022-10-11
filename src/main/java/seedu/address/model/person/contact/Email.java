@@ -1,13 +1,13 @@
-package seedu.address.model.person;
+package seedu.address.model.person.contact;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Person's email in the address book.
+ * Represents a Person's email in the contact book.
  * Guarantees: immutable; is valid as declared in {@link #isValidEmail(String)}
  */
-public class Email {
+public class Email extends Contact {
 
     private static final String SPECIAL_CHARACTERS = "+_.-";
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
@@ -30,8 +30,11 @@ public class Email {
     private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$"; // At least two chars
     private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)*" + DOMAIN_LAST_PART_REGEX;
     public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
+    private static final String EMAIL_LINK_PREFIX = "mailto:";
+    private static final String CONTACT_TYPE = "Email";
+    public static final String EMAIL_LOGO_FILEPATH = "";
 
-    public final String value;
+    public String value;
 
     /**
      * Constructs an {@code Email}.
@@ -39,6 +42,7 @@ public class Email {
      * @param email A valid email address.
      */
     public Email(String email) {
+        super(CONTACT_TYPE);
         requireNonNull(email);
         checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
         value = email;
@@ -49,6 +53,13 @@ public class Email {
      */
     public static boolean isValidEmail(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * @return Email address to be clicked on.
+     */
+    public String getLink() {
+        return EMAIL_LINK_PREFIX + this.value;
     }
 
     @Override
@@ -67,5 +78,4 @@ public class Email {
     public int hashCode() {
         return value.hashCode();
     }
-
 }

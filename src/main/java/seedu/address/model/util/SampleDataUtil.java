@@ -4,13 +4,14 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import seedu.address.model.AddressBook;
+import seedu.address.model.ContactBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.person.Address;
-import seedu.address.model.person.Email;
+import seedu.address.model.person.contact.Slack;
+import seedu.address.model.person.contact.Telegram;
+import seedu.address.model.person.contact.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Phone;
+import seedu.address.model.person.contact.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -19,29 +20,47 @@ import seedu.address.model.tag.Tag;
 public class SampleDataUtil {
     public static Person[] getSamplePersons() {
         return new Person[] {
-            new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                new Address("Blk 30 Geylang Street 29, #06-40"),
-                getTagSet("friends")),
-            new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
-                getTagSet("colleagues", "friends")),
-            new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
-                getTagSet("neighbours")),
-            new Person(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
-                getTagSet("family")),
-            new Person(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                new Address("Blk 47 Tampines Street 20, #17-35"),
-                getTagSet("classmates")),
-            new Person(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                new Address("Blk 45 Aljunied Street 85, #11-31"),
-                getTagSet("colleagues"))
+            new Person(new Name("Alex Yeoh"))
+                    .setPhone(new Phone("87438807"))
+                    .setEmail(new Email("alexyeoh@example.com"))
+                    .setTelegram(new Telegram("@alexyy"))
+                    .setSlack(new Slack("alexyeohhh_"))
+                    .addTags(getTagSet("Backend Developer")),
+            new Person(new Name("Bernice Yu"))
+                    .setPhone(new Phone("99272758"))
+                    .setEmail(new Email("berniceyu@example.com"))
+                    .setTelegram(new Telegram("@berniceyu"))
+                    .setSlack(new Slack("berniceyu"))
+                    .addTags(getTagSet("Full Stack Developer", "DevOps Expert")),
+            new Person(new Name("Charlotte Oliveiro"))
+                    .setPhone(new Phone("93210283"))
+                    .setEmail(new Email("charlotte@example.com"))
+                    .setTelegram(new Telegram("@charlotteo"))
+                    .setSlack(new Slack("charlotteoliveiro"))
+                    .addTags(getTagSet("Project Manager")),
+            new Person(new Name("David Li"))
+                    .setPhone(new Phone("91031282"))
+                    .setEmail(new Email("lidavid@example.com"))
+                    .setTelegram(new Telegram("@davidli"))
+                    .setSlack(new Slack("david_li"))
+                    .addTags(getTagSet("Backend Team Lead")),
+            new Person(new Name("Irfan Ibrahim"))
+                    .setPhone(new Phone("92492021"))
+                    .setEmail(new Email("irfan@example.com"))
+                    .setTelegram(new Telegram("@irfannn"))
+                    .setSlack(new Slack("_irfan_ibrahim"))
+                    .addTags(getTagSet("QA Team Lead")),
+            new Person(new Name("Roy Balakrishnan"))
+                    .setPhone(new Phone("92624417"))
+                    .setEmail(new Email("royb@example.com"))
+                    .setTelegram(new Telegram("@royBalakrish"))
+                    .setSlack(new Slack("roy_balakrishnan"))
+                    .addTags(getTagSet("colleagues"))
         };
     }
 
-    public static ReadOnlyAddressBook getSampleAddressBook() {
-        AddressBook sampleAb = new AddressBook();
+    public static ReadOnlyAddressBook getSampleContactBook() {
+        ContactBook sampleAb = new ContactBook();
         for (Person samplePerson : getSamplePersons()) {
             sampleAb.addPerson(samplePerson);
         }

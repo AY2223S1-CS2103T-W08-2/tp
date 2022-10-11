@@ -7,6 +7,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import seedu.address.model.person.contact.Contact;
+import seedu.address.model.person.contact.Email;
+import seedu.address.model.person.contact.Phone;
+import seedu.address.model.person.contact.Slack;
+import seedu.address.model.person.contact.Telegram;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -17,41 +22,67 @@ public class Person {
 
     // Identity fields
     private final Name name;
-    private final Phone phone;
-    private final Email email;
-
-    // Data fields
-    private final Address address;
+    private Email email = null;
+    private Phone phone = null;
+    private Slack slack = null;
+    private Telegram telegram = null;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name) {
+        requireAllNonNull(name);
         this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.tags.addAll(tags);
     }
 
     public Name getName() {
         return name;
     }
 
-    public Phone getPhone() {
-        return phone;
-    }
-
     public Email getEmail() {
         return email;
     }
-
-    public Address getAddress() {
-        return address;
+    public Person setEmail(Email email) {
+        this.email = email;
+        return this;
     }
 
+    public Phone getPhone() {
+        return phone;
+    }
+    public Person setPhone(Phone phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public Slack getSlack() {
+        return slack;
+    }
+    public Person setSlack(Slack slack) {
+        this.slack = slack;
+        return this;
+    }
+
+    public Telegram getTelegram() {
+        return telegram;
+    }
+    public Person setTelegram(Telegram telegram) {
+        this.telegram = telegram;
+        return this;
+    }
+
+    public Person addTag(Tag tag) {
+        requireAllNonNull(tag);
+        tags.add(tag);
+        return this;
+    }
+
+    public Person addTags(Set<Tag> tags) {
+        requireAllNonNull(tags);
+        this.tags.addAll(tags);
+        return this;
+    }
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
@@ -89,28 +120,31 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return otherPerson.getName().equals(getName())
-                && otherPerson.getPhone().equals(getPhone())
                 && otherPerson.getEmail().equals(getEmail())
-                && otherPerson.getAddress().equals(getAddress())
+                && otherPerson.getPhone().equals(getPhone())
+                && otherPerson.getSlack().equals(getSlack())
+                && otherPerson.getTelegram().equals(getTelegram())
                 && otherPerson.getTags().equals(getTags());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, email, phone, slack, telegram, tags);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append(getName())
-                .append("; Phone: ")
-                .append(getPhone())
                 .append("; Email: ")
                 .append(getEmail())
-                .append("; Address: ")
-                .append(getAddress());
+                .append("; Phone: ")
+                .append(getPhone())
+                .append("; Slack: ")
+                .append(getSlack())
+                .append("; Telegram: ")
+                .append(getTelegram());
 
         Set<Tag> tags = getTags();
         if (!tags.isEmpty()) {
@@ -119,5 +153,4 @@ public class Person {
         }
         return builder.toString();
     }
-
 }

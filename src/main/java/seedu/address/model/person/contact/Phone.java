@@ -1,19 +1,25 @@
-package seedu.address.model.person;
+package seedu.address.model.person.contact;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Person's phone number in the address book.
+ * Represents a Person's phone number in the contact book.
  * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}
  */
-public class Phone {
+public class Phone extends Contact {
 
 
     public static final String MESSAGE_CONSTRAINTS =
             "Phone numbers should only contain numbers, and it should be at least 3 digits long";
     public static final String VALIDATION_REGEX = "\\d{3,}";
+    public static final String PHONE_LINK_PREFIX = "tel:";
+    public static final String PHONE_LOGO_FILEPATH = "";
+
+    private static final String CONTACT_TYPE = "Phone";
+
     public final String value;
+
 
     /**
      * Constructs a {@code Phone}.
@@ -21,6 +27,7 @@ public class Phone {
      * @param phone A valid phone number.
      */
     public Phone(String phone) {
+        super(CONTACT_TYPE);
         requireNonNull(phone);
         checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
         value = phone;
@@ -32,6 +39,11 @@ public class Phone {
     public static boolean isValidPhone(String test) {
         return test.matches(VALIDATION_REGEX);
     }
+
+    public String getLink() {
+        return PHONE_LINK_PREFIX + this.value;
+    }
+
 
     @Override
     public String toString() {
