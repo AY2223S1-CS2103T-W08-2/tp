@@ -53,7 +53,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
         if (argMultimap.getValue(PREFIX_GITHUB).isPresent()) {
-            editPersonDescriptor.setGithub(ParserUtil.parseGithubUser(argMultimap.getValue(PREFIX_GITHUB).get()));
+            editPersonDescriptor.setGithubUser(ParserUtil.parseGithubUser(argMultimap.getValue(PREFIX_GITHUB).get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 

@@ -142,6 +142,7 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setTags(toCopy.tags);
+            setGithubUser(toCopy.githubUser);
         }
 
         /**
@@ -175,7 +176,7 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-        public void setGithub(GithubUser githubUser) {
+        public void setGithubUser(GithubUser githubUser) {
             this.githubUser = githubUser;
         }
 
