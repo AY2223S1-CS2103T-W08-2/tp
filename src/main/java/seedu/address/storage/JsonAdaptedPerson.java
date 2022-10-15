@@ -101,7 +101,7 @@ class JsonAdaptedPerson {
         }
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName).setGithub(null);
+        return new Person(modelName);
     }
 
 }

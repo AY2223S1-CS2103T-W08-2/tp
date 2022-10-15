@@ -17,10 +17,10 @@ import seedu.address.model.tag.Tag;
 public class Person {
 
     // Identity fields
-    private Name name;
-    private Phone phone = null;
-    private Email email = null;
-    private GithubUser githubUser = null;
+    private final Name name;
+    private final Phone phone = null;
+    private final Email email = null;
+    private final GithubUser githubUser = null;
 
     // Data fields
     private final Set<Tag> tags = new HashSet<>();
@@ -67,11 +67,6 @@ public class Person {
 
         return otherPerson != null
                 && otherPerson.getName().equals(getName());
-    }
-
-    public Person setGithub(GithubUser githubUser) {
-        this.githubUser = githubUser;
-        return this;
     }
 
     /**
