@@ -66,10 +66,10 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String github} into an {@code Address}.
+     * Parses a {@code String github} into an {@code GithubUser}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code address} is invalid.
+     * @throws ParseException if the given {@code github} is invalid.
      */
     public static GithubUser parseGithubUser(String githubUser) throws ParseException {
         requireNonNull(githubUser);

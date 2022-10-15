@@ -37,4 +37,8 @@ public class GithubUser {
     public static boolean isValidGithub(String username) {
         return username.matches(VALIDATION_REGEX);
     }
+
+    public String ifPresent(Object object) {
+        return null;
+    }
 }
