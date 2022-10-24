@@ -122,7 +122,7 @@ public class ModelManager implements Model {
 
     @Override
     public void setSelectedPerson(Person person) {
-        assert person != null: "Selected person must not be null";
+        assert person != null : "Selected person must not be null";
 
         selectedPerson.set(person);
     }

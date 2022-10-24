@@ -131,21 +131,21 @@ public class MainWindow extends UiPart<Stage> {
 
         MainPanel panelToSwitch = null;
         switch (mainPanelName) {
-            case LIST:
-                panelToSwitch = personListPanel;
-                break;
-            case HELP:
-                panelToSwitch = helpPanel;
-                break;
-            case DETAIL:
-                panelToSwitch = detailPanel;
-                break;
-            case DETAILHELP:
-                panelToSwitch = detailHelpPanel;
-                break;
-            default:
-                panelToSwitch = personListPanel;
-                break;
+        case LIST:
+            panelToSwitch = personListPanel;
+            break;
+        case HELP:
+            panelToSwitch = helpPanel;
+            break;
+        case DETAIL:
+            panelToSwitch = detailPanel;
+            break;
+        case DETAILHELP:
+            panelToSwitch = detailHelpPanel;
+            break;
+        default:
+            panelToSwitch = personListPanel;
+            break;
         }
 
         assert panelToSwitch != null;
