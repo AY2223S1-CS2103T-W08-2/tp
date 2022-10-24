@@ -88,6 +88,7 @@ public class LogicManager implements Logic {
 
     @Override
     public void setSelectedPerson(Person selectedPerson) {
+        logger.info("Selected " + selectedPerson.getName() + " as person.");
         model.setSelectedPerson(selectedPerson);
     }
 

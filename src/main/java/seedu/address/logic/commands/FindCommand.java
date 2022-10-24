@@ -36,7 +36,7 @@ public class FindCommand extends Command {
 
     @Override
     public boolean canExecuteAt(MainPanelName name) {
-        return name.equals(MainPanelName.List);
+        return name.equals(MainPanelName.LIST);
     }
 
     @Override

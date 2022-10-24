@@ -5,14 +5,14 @@ package seedu.address.ui;
  */
 public enum MainPanelName {
     // Help panel
-    Help,
+    HELP,
 
     // List person panel
-    List,
+    LIST,
 
     // Detail panel
-    Detail,
+    DETAIL,
 
     // Detail's help panel
-    DetailHelp
+    DETAILHELP
 }

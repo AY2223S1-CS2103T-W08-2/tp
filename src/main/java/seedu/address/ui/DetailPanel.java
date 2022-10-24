@@ -83,6 +83,6 @@ public class DetailPanel extends MainPanel {
 
     @Override
     public MainPanelName getPanelName() {
-        return MainPanelName.Detail;
+        return MainPanelName.DETAIL;
     }
 }

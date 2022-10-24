@@ -22,6 +22,6 @@ public class HelpCommand extends Command {
 
     @Override
     public boolean canExecuteAt(MainPanelName name) {
-        return name.equals(MainPanelName.Detail) || name.equals(MainPanelName.List);
+        return name.equals(MainPanelName.DETAIL) || name.equals(MainPanelName.LIST);
     }
 }

@@ -13,6 +13,6 @@ public class DetailHelpPanel extends MainPanel {
 
     @Override
     public MainPanelName getPanelName() {
-        return MainPanelName.DetailHelp;
+        return MainPanelName.DETAILHELP;
     }
 }

@@ -70,7 +70,7 @@ public class PersonListPanel extends MainPanel {
 
     @Override
     public MainPanelName getPanelName() {
-        return MainPanelName.List;
+        return MainPanelName.LIST;
     }
 
     /**

@@ -121,7 +121,7 @@ public class SetCommand extends Command {
 
     @Override
     public boolean canExecuteAt(MainPanelName name) {
-        return name.equals(MainPanelName.Detail);
+        return name.equals(MainPanelName.DETAIL);
     }
 
     @Override

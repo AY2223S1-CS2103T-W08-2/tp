@@ -13,6 +13,6 @@ public class HelpPanel extends MainPanel {
 
     @Override
     public MainPanelName getPanelName() {
-        return MainPanelName.Help;
+        return MainPanelName.HELP;
     }
 }

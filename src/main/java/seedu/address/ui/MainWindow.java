@@ -83,7 +83,7 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList(), this::selectPerson);
 
-        currentMainPanel = MainPanelName.List;
+        currentMainPanel = MainPanelName.LIST;
         mainPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
         detailPanel = new DetailPanel(logic.getSelectedPerson());
@@ -118,6 +118,7 @@ public class MainWindow extends UiPart<Stage> {
      *                      to be stored
      */
     private void switchMainPanel(MainPanelName mainPanelName, boolean recordHistory) {
+
         if (currentMainPanel.equals(mainPanelName)) {
             return;
         }
@@ -130,27 +131,28 @@ public class MainWindow extends UiPart<Stage> {
 
         MainPanel panelToSwitch = null;
         switch (mainPanelName) {
-        case List:
-            panelToSwitch = personListPanel;
-            break;
-        case Help:
-            panelToSwitch = helpPanel;
-            break;
-        case Detail:
-            panelToSwitch = detailPanel;
-            break;
-        case DetailHelp:
-            panelToSwitch = detailHelpPanel;
-            break;
-        default:
-            panelToSwitch = personListPanel;
-            break;
+            case LIST:
+                panelToSwitch = personListPanel;
+                break;
+            case HELP:
+                panelToSwitch = helpPanel;
+                break;
+            case DETAIL:
+                panelToSwitch = detailPanel;
+                break;
+            case DETAILHELP:
+                panelToSwitch = detailHelpPanel;
+                break;
+            default:
+                panelToSwitch = personListPanel;
+                break;
         }
 
         assert panelToSwitch != null;
 
         mainPanelPlaceholder.getChildren().clear();
         mainPanelPlaceholder.getChildren().add(panelToSwitch.getRoot());
+        logger.info("Switch to Panel: " + panelToSwitch.getPanelName());
     }
 
     /**
@@ -158,10 +160,10 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleHelp() {
-        if (currentMainPanel.equals(MainPanelName.List)) {
-            switchMainPanel(MainPanelName.Help, true);
-        } else if (currentMainPanel.equals(MainPanelName.Detail)) {
-            switchMainPanel(MainPanelName.DetailHelp, true);
+        if (currentMainPanel.equals(MainPanelName.LIST)) {
+            switchMainPanel(MainPanelName.HELP, true);
+        } else if (currentMainPanel.equals(MainPanelName.DETAIL)) {
+            switchMainPanel(MainPanelName.DETAILHELP, true);
         }
     }
 
@@ -224,6 +226,6 @@ public class MainWindow extends UiPart<Stage> {
 
     private void selectPerson(Person person) {
         logic.setSelectedPerson(person);
-        switchMainPanel(MainPanelName.Detail, true);
+        switchMainPanel(MainPanelName.DETAIL, true);
     }
 }
