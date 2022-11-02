@@ -100,18 +100,24 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
     }
 
     private boolean matchesName(Person person) {
+        String keywordsLowCase = keywords.toLowerCase();
+        String nameLowCase = person.getName().fullName.toLowerCase();
         return findSimilarity(keywords, person.getName().fullName) > 0.5
-                || StringUtil.containsWordIgnoreCase(
-                        person.getName().fullName, keywords);
+                || nameLowCase.contains(
+                        keywordsLowCase
+        );
     }
 
     private boolean matchesAddress(Person person) {
         if (person.getAddress().isPresent()) {
             assert person.getAddress().get() != null : "Error with matchesAddress method";
+            String addressLowCase = person.getAddress().get().value.toLowerCase();
+            String keywordsLowCase = keywords.toLowerCase();
             return findSimilarity(keywords, String.valueOf(
                     person.getAddress().get().value)) > 0.5
-                    || StringUtil.containsWordIgnoreCase(
-                            String.valueOf(person.getAddress().get().value), keywords);
+                    || addressLowCase.contains(
+                            keywordsLowCase
+            );
         } else {
             return false;
         }
@@ -119,26 +125,34 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
 
     private boolean matchesRole(Person person) {
         if (person.getRole().isPresent()) {
+            String roleLowCase = person.getRole().get().role.toLowerCase();
+            String keywordsLowCase = keywords.toLowerCase();
             return findSimilarity(keywords, String.valueOf(person.getRole().get().role)) > 0.5
-                    || StringUtil.containsWordIgnoreCase(
-                            String.valueOf(person.getRole().get().role), keywords);
+                    || roleLowCase.contains(
+                            keywordsLowCase
+            );
         } else {
             return false;
         }
     }
 
     private boolean matchesGitHubUser(Person person) {
+        String gitHubUserLowCase = person.getGitHubUser().toString().toLowerCase();
+        String keywordsLowCase = keywords.toLowerCase();
         return findSimilarity(keywords, person.getGitHubUser().toString()) > 0.5
-                || StringUtil.containsWordIgnoreCase(
-                        person.getGitHubUser().toString(), keywords);
+                || gitHubUserLowCase.contains(
+                        keywordsLowCase
+        );
     }
 
     private boolean matchesTags(Person person) {
         Object[] tags = person.getTags().toArray();
         for (int i = 0; i < tags.length; i++) {
+            String tagLowCase = tags[i].toString().toLowerCase();
+            String keywordsLowCase = keywords.toLowerCase();
             assert tags[i] instanceof Tag : "Error with tags list of Person";
             if (findSimilarity(keywords, tags[i].toString()) > 0.5
-                    || StringUtil.containsWordIgnoreCase(tags[i].toString(), keywords)) {
+                    || tagLowCase.contains(keywordsLowCase)) {
                 return true;
             }
         }
