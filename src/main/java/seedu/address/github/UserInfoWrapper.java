@@ -13,24 +13,23 @@ import org.json.JSONObject;
 
 import kong.unirest.UnirestInstance;
 import seedu.address.github.exceptions.FileSaveFailException;
+import seedu.address.model.UserPrefs;
 
 /**
  * Class representing a wrapper over the requests and routes needed to get user information from GitHub
  */
 public class UserInfoWrapper {
-    //@@author arnav-ag
-
     private static final String NAME_KEY = "name";
     private static final String URL_KEY = "html_url";
     private static final String USERNAME_KEY = "login";
     private static final String EMAIL_KEY = "email";
     private static final String LOCATION_KEY = "location";
     private static final String IMAGE_LOCATION_KEY = "avatar_url";
-    private final Path defaultImageDirectory = Paths.get("data", "images");
+    private final Path avatarImageFileDirectory;
     private final UserInfoRoute.UserInfoRequest userInfoRequest;
     private final UserInfoRoute.UserAvatarRequest userAvatarRequest;
 
-    private final String defaultImageFileName;
+    private final String avatarImageFileName;
     private JSONObject userJson;
 
     /**
@@ -46,7 +45,11 @@ public class UserInfoWrapper {
         getUserJson();
 
         userAvatarRequest = userInfoRoute.createAvatarRequest(unirest, getAvatarUrl());
-        defaultImageFileName = getUsername() + ".png";
+        avatarImageFileName = getUsername() + ".png";
+
+        UserPrefs userPrefs = new UserPrefs();
+        avatarImageFileDirectory =
+            Paths.get(userPrefs.getAddressBookFilePath().getParent().toString(), "images");
     }
 
     private void getUserJson() {
@@ -76,15 +79,27 @@ public class UserInfoWrapper {
     /**
      * Downloads avatar to file specified in class above.
      */
-    public void downloadAvatar() {
+    public void downloadAvatar() throws FileSaveFailException {
         byte[] image = userAvatarRequest.getAvatarImage();
         try {
-            defaultImageDirectory.toFile().mkdirs();
-            Files.write(Paths.get(defaultImageDirectory.toString(), defaultImageFileName), image);
+            if (avatarImageFileDirectory.toFile().mkdirs()) {
+                Path avatarImageFilePath = Paths.get(avatarImageFileDirectory.toString(), avatarImageFileName);
+                if (!avatarImageFilePath.toFile().isFile()) {
+                    if (!avatarImageFilePath.toFile().delete()) {
+                        throw new FileSaveFailException(
+                            "Directory exists with same name as file to be saved and could not be deleted. Please "
+                                + "delete directory to save this user's avatar.");
+                    }
+                }
+                Files.write(avatarImageFilePath, image);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new FileSaveFailException("Unable to save user avatar to local storage.");
         }
+    }
+
+    public Path getAvatarImageFilePath() {
+        return Paths.get(avatarImageFileDirectory.toString(), avatarImageFileName);
     }
 
     public String getUrl() {
@@ -94,10 +109,10 @@ public class UserInfoWrapper {
     @Override
     public boolean equals(Object other) {
         return other == this
-                || (other instanceof UserInfoWrapper)
-                && userInfoRequest.equals(((UserInfoWrapper) other).userInfoRequest)
-                && userAvatarRequest.equals(((UserInfoWrapper) other).userAvatarRequest)
-                && userJson.equals(((UserInfoWrapper) other).userJson);
+            || (other instanceof UserInfoWrapper)
+            && userInfoRequest.equals(((UserInfoWrapper) other).userInfoRequest)
+            && userAvatarRequest.equals(((UserInfoWrapper) other).userAvatarRequest)
+            && userJson.equals(((UserInfoWrapper) other).userJson);
     }
 
     @Override
